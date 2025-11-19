@@ -60,10 +60,6 @@ export function RegisterForm() {
   return (
     <Card className="w-full max-w-md p-6">
       <div className="mb-6">
-        <div className="flex items-center gap-2 mb-4">
-          <CheckCircle2 className="h-5 w-5 text-green-600" />
-          <span className="text-sm text-green-600 font-medium">Database Ready</span>
-        </div>
         <h1 className="text-2xl font-bold">Create Account</h1>
         <p className="text-sm text-gray-600 mt-2">Start managing your restaurant menu</p>
       </div>
