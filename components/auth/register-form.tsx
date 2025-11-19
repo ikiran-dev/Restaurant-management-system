@@ -15,51 +15,8 @@ export function RegisterForm() {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isInitializing, setIsInitializing] = useState(false);
-  const [dbInitialized, setDbInitialized] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    checkDatabaseStatus();
-  }, []);
-
-  async function checkDatabaseStatus() {
-    try {
-      const response = await fetch('/api/auth/me', {
-        method: 'GET',
-      });
-      // If we can call /api/auth/me, the database is likely initialized
-      setDbInitialized(true);
-    } catch (err) {
-      setDbInitialized(false);
-    }
-  }
-
-  async function handleInitializeDatabase() {
-    setIsInitializing(true);
-    setError('');
-
-    try {
-      const response = await fetch('/api/db/init', {
-        method: 'POST',
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.error || 'Failed to initialize database');
-        return;
-      }
-
-      setDbInitialized(true);
-      setError('');
-    } catch (err) {
-      setError('An error occurred while initializing the database. Please try again.');
-      console.error( err);
-    } finally {
-      setIsInitializing(false);
-    }
-  }
 
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
@@ -98,43 +55,7 @@ export function RegisterForm() {
     }
   }
 
-  if (!dbInitialized) {
-    return (
-      <Card className="w-full max-w-md p-6">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold">Setup Required</h1>
-          <p className="text-sm text-gray-600 mt-2">Initialize your database to get started</p>
-        </div>
 
-        <Alert className="mb-4 border-blue-200 bg-blue-50">
-          <AlertCircle className="h-4 w-4 text-blue-600" />
-          <AlertDescription className="text-blue-800">
-            The database needs to be initialized on first use. Click the button below to set it up.
-          </AlertDescription>
-        </Alert>
-
-        <Button
-          onClick={handleInitializeDatabase}
-          disabled={isInitializing}
-          className="w-full"
-          size="lg"
-        >
-          {isInitializing ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Initializing Database...
-            </>
-          ) : (
-            'Initialize Database'
-          )}
-        </Button>
-
-        <p className="text-sm text-gray-600 mt-4 text-center">
-          This only needs to be done once.
-        </p>
-      </Card>
-    );
-  }
 
   return (
     <Card className="w-full max-w-md p-6">
